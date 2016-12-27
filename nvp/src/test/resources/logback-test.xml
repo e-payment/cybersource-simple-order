@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+         <pattern>[%d{HH:mm:ss.SSS zzz}] %-5level [%t] %logger{30}.%method\(%F:%L\) - %msg%n</pattern>
+      </encoder>
+   </appender>
+
+   <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+      <appender-ref ref="CONSOLE" />
+      <includeCallerData>true</includeCallerData>
+   </appender>
+
+<!--
+   <logger name="test" level="DEBUG" />
+   <logger name="com.cybersource.sample" level="TRACE" />
+-->
+
+   <root level="TRACE">
+      <appender-ref ref="CONSOLE" />
+   </root>
+
+</configuration>
