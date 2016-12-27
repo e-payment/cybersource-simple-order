@@ -24,7 +24,7 @@ gradle/
 .gradle/
 
 screenshots/*
-logs/
+log/
 target/
 #*.p12
 *.db

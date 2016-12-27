@@ -16,7 +16,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.cybersource.ws.client.ClientException;
-import com.cybersource.ws.client.FaultException;
 import com.cybersource.ws.client.Utility;
 import com.cybersource.ws.client.XMLClient;
 
@@ -65,16 +64,9 @@ public class AuthSample {
 
 			displayDocument("CREDIT CARD AUTHORIZATION REPLY:", reply);
 			
-		} catch (ClientException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println(e.getMessage());
-			if (e.isCritical()) {
-				handleCriticalException(e, request);
-			}
-		} catch (FaultException e) {
-			System.out.println(e.getMessage());
-			if (e.isCritical()) {
-				handleCriticalException(e, request);
-			}
 		}
 	}
 
@@ -96,6 +88,7 @@ public class AuthSample {
 	 * @return Document object.
 	 */
 	private static Document readRequest(Properties props, String[] commandLineArgs) {
+		
 		Document doc = null;
 
 		try {
@@ -112,7 +105,7 @@ public class AuthSample {
 			
 			if (pos != -1) {
 				
-				StringBuffer sb = new StringBuffer(xmlString);
+				StringBuilder sb = new StringBuilder(xmlString);
 				String namespaceURI = XMLClient.getEffectiveNamespaceURI(props, null);
 				//log.debug("found _NSURI_ : {}", namespaceURI);
 				sb.replace(pos, pos + 7, namespaceURI);
@@ -126,6 +119,7 @@ public class AuthSample {
 			DocumentBuilder builder = dbf.newDocumentBuilder();
 			doc = builder.parse(bais);
 			bais.close();
+			
 		} catch (ClientException e) {
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
@@ -148,52 +142,13 @@ public class AuthSample {
 	 *            Document object to display.
 	 */
 	private static void displayDocument(String header, Document doc) {
-		System.out.println(header);
+		log.debug("\n{}", header);
 
 		// Note that Utility.nodeToString() is meant to be used for logging
 		// or demo purposes only. As it employs some formatting
 		// parameters, parsing the string it returns may not result to a
 		// Node object exactly similar to the one passed to it.
-		System.out.println(Utility.nodeToString(doc));
+		log.debug("\n{}", Utility.nodeToString(doc));
 	}
 
-	/**
-	 * An exception is considered critical if some type of disconnect occurs
-	 * between the client and server and the client can't determine whether the
-	 * transaction was successful. If this happens, you might have a transaction
-	 * in the CyberSource system that your order system is not aware of. Because
-	 * the transaction may have been processed by CyberSource, you should not
-	 * resend the transaction, but instead send the exception information and
-	 * the order information (customer name, order number, etc.) to the
-	 * appropriate personnel at your company to resolve the problem. They should
-	 * use the information as search criteria within the CyberSource Transaction
-	 * Search Screens to find the transaction and determine if it was
-	 * successfully processed. If it was, you should update your order system
-	 * with the transaction information. Note that this is only a
-	 * recommendation; it may not apply to your business model.
-	 *
-	 * @param e
-	 *            Critical ClientException object.
-	 * @param request
-	 *            Request that was sent.
-	 */
-	private static void handleCriticalException(ClientException e, Document request) {
-		// send the exception and order information to the appropriate
-		// personnel at your company using any suitable method, e.g. e-mail,
-		// multicast log, etc.
-	}
-
-	/**
-	 * See header comment in the other version of handleCriticalException above.
-	 *
-	 * @param e
-	 *            Critical ClientException object.
-	 * @param request
-	 *            Request that was sent.
-	 */
-	private static void handleCriticalException(FaultException e, Document request) {
-		// send the exception and order information to the appropriate
-		// personnel at your company using any suitable method, e.g. e-mail,
-		// multicast log, etc.
-	}
 }
