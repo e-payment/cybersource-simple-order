@@ -4,10 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cybersource.sample</groupId>
     <artifactId>AuthSample</artifactId>
+    <name>AuthSample</name>
     <packaging>jar</packaging>
     <version>1.0.0</version>
-    <name>AuthSample</name>
-    <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
