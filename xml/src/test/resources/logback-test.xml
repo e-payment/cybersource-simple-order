@@ -3,7 +3,8 @@
 
    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
       <encoder>
-         <pattern>[%d{HH:mm:ss.SSS zzz}] %-5level [%t] %logger{30}.%method\(%F:%L\) - %msg%n</pattern>
+         <!--  [%d{HH:mm:ss.SSS zzz}] %-5level [%t] %logger{30}.%method\(%F:%L\) - %msg%n  -->
+         <pattern>[%d{HH:mm:ss.SSS zzz}] %-5level [%t] %logger.%method\(\) - %msg%n</pattern>
       </encoder>
    </appender>
 

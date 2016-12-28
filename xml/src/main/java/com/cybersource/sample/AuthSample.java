@@ -99,15 +99,13 @@ public class AuthSample {
 
 			// replace _NSURI_ (if any) with effective namespace URI.
 			String xmlString = new String(xmlBytes, "UTF-8");
-			//log.debug("xmlString:\n{}", xmlString);
-
 			int pos = xmlString.indexOf("_NSURI_");
 			
 			if (pos != -1) {
 				
 				StringBuilder sb = new StringBuilder(xmlString);
 				String namespaceURI = XMLClient.getEffectiveNamespaceURI(props, null);
-				//log.debug("found _NSURI_ : {}", namespaceURI);
+
 				sb.replace(pos, pos + 7, namespaceURI);
 				xmlBytes = sb.toString().getBytes("UTF-8");
 			}
@@ -142,13 +140,10 @@ public class AuthSample {
 	 *            Document object to display.
 	 */
 	private static void displayDocument(String header, Document doc) {
-		log.debug("\n{}", header);
-
 		// Note that Utility.nodeToString() is meant to be used for logging
 		// or demo purposes only. As it employs some formatting
 		// parameters, parsing the string it returns may not result to a
 		// Node object exactly similar to the one passed to it.
-		log.debug("\n{}", Utility.nodeToString(doc));
+		log.debug("\n{}\n{}", header, util.XmlUtil.format(Utility.nodeToString(doc)));
 	}
-
 }
