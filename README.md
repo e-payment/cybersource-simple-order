@@ -1,6 +1,9 @@
 CyberSource Simple Order API for Java
 =====================================
 
+## Reference
+ * [Simple Order API & SOAP Toolkit API](https://www.cybersource.com/developers/integration_methods/simple_order_and_soap_toolkit_api/)
+
 ### Maven
 To install the cybersource-sdk-java from central repository, add dependency to your application pom.xml as below.
 ```xml
