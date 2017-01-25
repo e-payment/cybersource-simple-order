@@ -10,16 +10,15 @@ To install the cybersource-sdk-java from central repository, add dependency to y
 <dependency>
     <groupId>com.cybersource</groupId>
     <artifactId>cybersource-sdk-java</artifactId>
-    <version>6.2.2</version>
+    <version>6.2.3</version>
 </dependency>
 ```
- Run mvn install, to install dependency
 
 ### Grails/Gradle
 Add the dependency to your build.gradle
 ```groovy
 dependencies {
-    compile 'com.cybersource:cybersource-sdk-java:6.2.2'
+    compile 'com.cybersource:cybersource-sdk-java:6.2.3'
 }
 ```
 
@@ -52,7 +51,7 @@ Account Management
 
 - [How do I enable Java in my web browser?](https://java.com/en/download/help/enable_browser.xml)
 
-Firefox
+###### Firefox
 
 1. Open the Firefox browser or restart it, if it is already running
 2. From the Firefox menu, select Tools, then click the Add-ons option
@@ -64,9 +63,9 @@ Firefox
 
   Replace your Java installation’s existing security policy files with the new ones you downloaded from the Oracle site:
 
-* 	Locate your existing US_export_policy.jar and local_policy.jar files in the $JAVA_HOME/jre/lib/security directory.  
+* 	Locate your existing `US_export_policy.jar` and `local_policy.jar` files in the $JAVA_HOME/jre/lib/security directory.  
 * 	Rename or move your existing files to another directory.  
-* 	Copy the new US_export_policy.jar and local_policy.jar that you downloaded from Oracle to the $JAVA_HOME/jre/lib/security directory.  
+* 	Copy the new `US_export_policy.jar` and `local_policy.jar` that you downloaded from Oracle to the $JAVA_HOME/jre/lib/security directory.  
 
 
 ## Installing the SDK
