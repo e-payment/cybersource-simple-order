@@ -4,25 +4,25 @@
 <!-- We will let the XMLClient insert the merchantID.                    -->
 	<merchantReferenceCode>your_merchant_reference_code</merchantReferenceCode>
 	<billTo>
-		<firstName>John</firstName>
-		<lastName>Doe</lastName>
-		<street1>1295 Charleston Road</street1>
-		<city>Mountain View</city>
-		<state>CA</state>
-		<postalCode>94043</postalCode>
-		<country>US</country>
-		<phoneNumber>650-965-6000</phoneNumber>
+		<firstName>Krungsri</firstName>
+		<lastName>Simple</lastName>
+		<street1>1222 Rama III Road</street1>
+		<city>Bang Phongphang</city>
+		<state>BKK</state>
+		<postalCode>10120</postalCode>
+		<country>TH</country>
+		<phoneNumber>662-296-2000</phoneNumber>
 		<email>nobody@cybersource.com</email>
 		<ipAddress>10.7.7.7</ipAddress>
 	</billTo>
 	<shipTo>
-		<firstName>Jane</firstName>
-		<lastName>Doe</lastName>
-		<street1>100 Elm Street</street1>
-		<city>San Mateo</city>
-		<state>CA</state>
-		<postalCode>94401</postalCode>
-		<country>US</country>
+		<firstName>Krungsri</firstName>
+		<lastName>Simple</lastName>
+		<street1>1222 Rama III Road</street1>
+		<city>Bang Phongphang</city>
+		<state>BKK</state>
+		<postalCode>10120</postalCode>
+		<country>TH</country>
 	</shipTo>
 	<item id="0">
 		<unitPrice>12.34</unitPrice>
@@ -31,7 +31,7 @@
 		<unitPrice>56.78</unitPrice>
 	</item>
 	<purchaseTotals>
-		<currency>USD</currency>
+		<currency>THB</currency>
 	</purchaseTotals>
 	<card>
 		<accountNumber>4111111111111111</accountNumber>
