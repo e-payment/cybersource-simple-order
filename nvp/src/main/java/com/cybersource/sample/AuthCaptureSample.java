@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Iterator;
 import java.util.Properties;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 import com.cybersource.ws.client.*;
 
 /**
@@ -20,6 +23,7 @@ public class AuthCaptureSample
 	 *				it will look for "cybs.properties" in the current
 	 *				directory.
 	 */
+
     public static void main( String[] args )
    	{   	
 	   	// read in properties file.
@@ -27,12 +31,15 @@ public class AuthCaptureSample
 
 		System.out.println( "Key file : "+props.getProperty("keyFilename") );
 
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		String merchantReferenceCode = df.format(new Date());
+
 	   	// run auth
-   		String requestID = runAuth( props );
+   		String requestID = runAuth(props, merchantReferenceCode);
    		if (requestID != null)
    		{
 	   		// if auth was successful, run capture
-   			runCapture( props, requestID );
+   			runCapture( props, requestID, merchantReferenceCode);
    		}
 	}
 	
@@ -43,7 +50,7 @@ public class AuthCaptureSample
 	 *
 	 * @return the requestID.
 	 */
-    public static String runAuth( Properties props )
+    public static String runAuth( Properties props, String merchantReferenceCode)
     {  	
 	    String requestID = null;
 	    
@@ -56,33 +63,44 @@ public class AuthCaptureSample
 		
 		// this is your own tracking number.  CyberSource recommends that you
 		// use a unique one for each order.
-		request.put( "merchantReferenceCode", "your_merchant_reference_code" );
+
+		request.put( "merchantReferenceCode", merchantReferenceCode);
 		
-		request.put( "billTo_firstName", "John" );
-		request.put( "billTo_lastName", "Doe" );
-		request.put( "billTo_street1", "1295 Charleston Road" );
-		request.put( "billTo_city", "Mountain View" );
-		request.put( "billTo_state", "CA" );
-		request.put( "billTo_postalCode", "94043" );
-		request.put( "billTo_country", "US" );
+		request.put( "billTo_firstName", "Krungsri" );
+		request.put( "billTo_lastName", "Simple" );
+		request.put( "billTo_street1", "1222 Rama 3 Road, Bang Phongphang" );
+		request.put( "billTo_city", "Yannawa" );
+		request.put( "billTo_state", "Bangkok" );
+		request.put( "billTo_postalCode", "10210" );
+		request.put( "billTo_country", "TH" );
 		request.put( "billTo_email", "nobody@cybersource.com" );
 		request.put( "billTo_ipAddress", "10.7.7.7" );
-		request.put( "billTo_phoneNumber", "650-965-6000" );
-		request.put( "shipTo_firstName", "Jane" );
-		request.put( "shipTo_lastName", "Doe" );
-		request.put( "shipTo_street1", "100 Elm Street" );
-		request.put( "shipTo_city", "San Mateo" );
-		request.put( "shipTo_state", "CA" );
-		request.put( "shipTo_postalCode", "94401" );
-		request.put( "shipTo_country", "US" );
-		request.put( "card_accountNumber", "4111111111111111" );
+		request.put( "billTo_phoneNumber", "+6622962000" );
+
+		// request.put( "shipTo_firstName", "Jane" );
+		// request.put( "shipTo_lastName", "Doe" );
+		// request.put( "shipTo_street1", "100 Elm Street" );
+		// request.put( "shipTo_city", "San Mateo" );
+		// request.put( "shipTo_state", "CA" );
+		// request.put( "shipTo_postalCode", "94401" );
+		// request.put( "shipTo_country", "US" );
+
+		request.put( "card_accountNumber", "4012001037141112" );
 		request.put( "card_expirationMonth", "12" );
-		request.put( "card_expirationYear", "2020" );
-		request.put( "purchaseTotals_currency", "USD" );
+		request.put( "card_expirationYear", "2021" );
+
+		request.put( "purchaseTotals_currency", "THB" );
 
 		// there are two items in this sample
-		request.put( "item_0_unitPrice", "12.34" );
-		request.put( "item_1_unitPrice", "56.78" );
+		request.put( "item_0_productName", "KFLTFDIV" );
+		request.put( "item_0_productSKU", "SKU 0" );
+		request.put( "item_0_quantity", "100" );
+		request.put( "item_0_unitPrice", "10.00" );
+
+		request.put( "item_1_productName", "KFLTFD70" );
+		request.put( "item_1_productSKU", "SKU 1" );
+		request.put( "item_1_quantity", "100" );
+		request.put( "item_1_unitPrice", "5.72" );
 
 		// add more fields here per your business needs
 		
@@ -130,7 +148,7 @@ public class AuthCaptureSample
 	 * @param props			Properties object.
 	 * @param authRequestID	requestID returned by a previous authorization.
 	 */
-    public static void runCapture( Properties props, String authRequestID )
+    public static void runCapture(Properties props, String authRequestID, String merchantReferenceCode)
     {  	
 	    String requestID = null;
 	    
@@ -145,14 +163,24 @@ public class AuthCaptureSample
 		// reports and transaction search screens, you should use the same
 		// merchantReferenceCode for the auth and subsequent captures and
 		// credits.
-		request.put( "merchantReferenceCode", "MRC-14344" );
-		
+
+		//request.put( "merchantReferenceCode", "MRC-14344");
+		request.put( "merchantReferenceCode", merchantReferenceCode);
+
 		// reference the requestID returned by the previous auth.
-		request.put( "ccCaptureService_authRequestID", authRequestID );
+		request.put( "ccCaptureService_authRequestID", authRequestID);
+
+		request.put( "purchaseTotals_currency", "THB" );
+
+		// partial settlement, this sample assumes only the first item has been shipped.
+
+		request.put( "item_0_productName", "KFLTFDIV" );
+		request.put( "item_0_productSKU", "SKU 0" );
+		request.put( "item_0_quantity", "100" );
+		request.put( "item_0_unitPrice", "10.00" );
 		
-		// this sample assumes only the first item has been shipped.
-		request.put( "purchaseTotals_currency", "USD" );
-		request.put( "item_0_unitPrice", "12.34" );
+		// full settlement
+		//request.put( "purchaseTotals_grandTotalAmount", "1572.00" );
 
 		// add more fields here per your business needs
 		

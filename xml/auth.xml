@@ -2,7 +2,7 @@
 <requestMessage xmlns="_NSURI_">
 <!-- The sample code will replace _NSURI_ with the actual namespace URI. -->
 <!-- We will let the XMLClient insert the merchantID.                    -->
-	<merchantReferenceCode>your_merchant_reference_code</merchantReferenceCode>
+	<merchantReferenceCode>201703030001</merchantReferenceCode>
 	<billTo>
 		<firstName>Krungsri</firstName>
 		<lastName>Simple</lastName>
@@ -12,8 +12,8 @@
 		<postalCode>10120</postalCode>
 		<country>TH</country>
 		<phoneNumber>662-296-2000</phoneNumber>
-		<email>nobody@cybersource.com</email>
-		<ipAddress>10.7.7.7</ipAddress>
+		<email>junlapong@gmail.com</email>
+		<ipAddress>127.0.0.1</ipAddress>
 	</billTo>
 	<shipTo>
 		<firstName>Krungsri</firstName>
@@ -34,10 +34,9 @@
 		<currency>THB</currency>
 	</purchaseTotals>
 	<card>
-		<accountNumber>4111111111111111</accountNumber>
-		<expirationMonth>09</expirationMonth>
+		<accountNumber>4012001037141112</accountNumber>
+		<expirationMonth>02</expirationMonth>
 		<expirationYear>2020</expirationYear>
 	</card>
-	<ccAuthService run="true">
-	</ccAuthService>
+	<ccAuthService run="true" />
 </requestMessage>
