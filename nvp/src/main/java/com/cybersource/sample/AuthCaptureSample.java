@@ -35,7 +35,6 @@ public class AuthCaptureSample {
     public static void runAuthorizeAndCapture(String merchantReferenceCode) {
 
 	   	// read in properties file.
-	   	//Properties props = Utility.readProperties(new String[] { CONFIG_FILE });
 		log.debug("Key file : {}", props.getProperty("keyFilename"));
 
 	   	// run auth
@@ -46,6 +45,19 @@ public class AuthCaptureSample {
    		}
 	}
 	
+    public static void runAuthorizeAndReversal(String merchantReferenceCode) {
+
+		log.debug("Key file : {}", props.getProperty("keyFilename"));
+
+	   	// run auth
+   		String requestID = runAuth(merchantReferenceCode);
+   		if (requestID != null) {
+	   		// if auth was successful, run capture
+   			runReversal(requestID, merchantReferenceCode);
+   		}
+	}
+
+
 	/**
 	 * Runs Credit Card Authorization.
 	 * 
@@ -180,6 +192,56 @@ public class AuthCaptureSample {
 		//request.put( "item_0_unitPrice", "10.00" );
 		
 		// full settlement
+		request.put( "purchaseTotals_grandTotalAmount", "1572.00" );
+
+		// add more fields here per your business needs
+		
+		try
+		{
+			displayMap( "FOLLOW-ON CAPTURE REQUEST:", request );
+			
+			// run transaction now
+			Map<String, String> reply = Client.runTransaction( request, props );	
+			
+			displayMap( "FOLLOW-ON CAPTURE REPLY:", reply );			
+		}	
+		catch (ClientException e)
+		{
+			System.out.println( e.getMessage() );
+			if (e.isCritical())
+			{
+				handleCriticalException( e, request );
+			}
+		}
+		catch (FaultException e)
+		{
+			System.out.println( e.getMessage() );
+			if (e.isCritical())
+			{
+				handleCriticalException( e, request );
+			}
+		}		
+    }
+
+    /**
+	 * Runs Full Authorization Reversal Request
+	 * 
+	 * @param authRequestID	requestID returned by a previous authorization.
+	 * @param merchantReferenceCode
+	 */
+    public static void runReversal(String authRequestID, String merchantReferenceCode) {  	
+	    
+	    String requestID = null;
+	    
+	   	HashMap<String, String> request = new HashMap<String, String>();
+	   	
+	   	// reference the requestID returned by the previous auth.
+		request.put( "ccAuthReversalService_authRequestID", authRequestID);
+		request.put( "ccAuthReversalService_run", "true" );
+		request.put( "merchantReferenceCode", merchantReferenceCode);
+
+		request.put( "purchaseTotals_currency", "THB" );
+		// full amount
 		request.put( "purchaseTotals_grandTotalAmount", "1572.00" );
 
 		// add more fields here per your business needs

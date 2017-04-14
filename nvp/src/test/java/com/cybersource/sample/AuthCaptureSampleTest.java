@@ -13,10 +13,17 @@ public class AuthCaptureSampleTest {
 	private static final SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
 
 	@Test
-	public void shouldAuthorize() throws Exception {
+	public void shouldAuthorizeAndCapture() throws Exception {
 
 		String merchantReferenceCode = df.format(new Date());
 		AuthCaptureSample.runAuthorizeAndCapture(merchantReferenceCode);
+	}
+
+	//@Test
+	public void shouldAuthorizeAndReversal() throws Exception {
+
+		String merchantReferenceCode = df.format(new Date());
+		AuthCaptureSample.runAuthorizeAndReversal(merchantReferenceCode);
 	}
 
 }
