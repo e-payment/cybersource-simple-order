@@ -2,19 +2,23 @@ package com.cybersource.sample;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.Properties;
 
-import java.util.Date;
-import java.text.SimpleDateFormat;
-
 import com.cybersource.ws.client.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Sample class that demonstrates how to call Credit Card Authorization.
  */
-public class AuthCaptureSample
-{
+public class AuthCaptureSample {
+
+	private static final Logger log = LoggerFactory.getLogger(AuthCaptureSample.class);
+	private static Properties props = Utility.readProperties(new String[] { "cybs.properties" });
+
 	/**
 	 * Entry point.
 	 *
@@ -24,22 +28,21 @@ public class AuthCaptureSample
 	 *				directory.
 	 */
 
-    public static void main( String[] args )
-   	{   	
+    public static void main(String[] args) {
+
+    }
+
+    public static void runAuthorizeAndCapture(String merchantReferenceCode) {
+
 	   	// read in properties file.
-	   	Properties props = Utility.readProperties( args );
-
-		System.out.println( "Key file : "+props.getProperty("keyFilename") );
-
-		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-		String merchantReferenceCode = df.format(new Date());
+	   	//Properties props = Utility.readProperties(new String[] { CONFIG_FILE });
+		log.debug("Key file : {}", props.getProperty("keyFilename"));
 
 	   	// run auth
-   		String requestID = runAuth(props, merchantReferenceCode);
-   		if (requestID != null)
-   		{
+   		String requestID = runAuth(merchantReferenceCode);
+   		if (requestID != null) {
 	   		// if auth was successful, run capture
-   			runCapture( props, requestID, merchantReferenceCode);
+   			runCapture(requestID, merchantReferenceCode);
    		}
 	}
 	
@@ -50,8 +53,8 @@ public class AuthCaptureSample
 	 *
 	 * @return the requestID.
 	 */
-    public static String runAuth( Properties props, String merchantReferenceCode)
-    {  	
+    public static String runAuth(String merchantReferenceCode) {
+
 	    String requestID = null;
 	    
 	   	HashMap<String, String> request = new HashMap<String, String>();
@@ -73,9 +76,9 @@ public class AuthCaptureSample
 		request.put( "billTo_state", "Bangkok" );
 		request.put( "billTo_postalCode", "10210" );
 		request.put( "billTo_country", "TH" );
-		request.put( "billTo_email", "nobody@cybersource.com" );
-		request.put( "billTo_ipAddress", "10.7.7.7" );
+		request.put( "billTo_email", "customer@mail.com" );
 		request.put( "billTo_phoneNumber", "+6622962000" );
+		request.put( "billTo_ipAddress", "10.7.7.7" );
 
 		// request.put( "shipTo_firstName", "Jane" );
 		// request.put( "shipTo_lastName", "Doe" );
@@ -93,12 +96,12 @@ public class AuthCaptureSample
 
 		// there are two items in this sample
 		request.put( "item_0_productName", "KFLTFDIV" );
-		request.put( "item_0_productSKU", "SKU 0" );
+		request.put( "item_0_productSKU", "SKU00" );
 		request.put( "item_0_quantity", "100" );
 		request.put( "item_0_unitPrice", "10.00" );
 
 		request.put( "item_1_productName", "KFLTFD70" );
-		request.put( "item_1_productSKU", "SKU 1" );
+		request.put( "item_1_productSKU", "SKU01" );
 		request.put( "item_1_quantity", "100" );
 		request.put( "item_1_unitPrice", "5.72" );
 
@@ -139,7 +142,7 @@ public class AuthCaptureSample
 			}
 		}
 		
-		return( requestID );
+		return requestID;
     }
     
 	/**
@@ -148,8 +151,8 @@ public class AuthCaptureSample
 	 * @param props			Properties object.
 	 * @param authRequestID	requestID returned by a previous authorization.
 	 */
-    public static void runCapture(Properties props, String authRequestID, String merchantReferenceCode)
-    {  	
+    public static void runCapture(String authRequestID, String merchantReferenceCode) {  	
+	    
 	    String requestID = null;
 	    
 	   	HashMap<String, String> request = new HashMap<String, String>();
@@ -163,8 +166,6 @@ public class AuthCaptureSample
 		// reports and transaction search screens, you should use the same
 		// merchantReferenceCode for the auth and subsequent captures and
 		// credits.
-
-		//request.put( "merchantReferenceCode", "MRC-14344");
 		request.put( "merchantReferenceCode", merchantReferenceCode);
 
 		// reference the requestID returned by the previous auth.
@@ -173,14 +174,13 @@ public class AuthCaptureSample
 		request.put( "purchaseTotals_currency", "THB" );
 
 		// partial settlement, this sample assumes only the first item has been shipped.
-
-		request.put( "item_0_productName", "KFLTFDIV" );
-		request.put( "item_0_productSKU", "SKU 0" );
-		request.put( "item_0_quantity", "100" );
-		request.put( "item_0_unitPrice", "10.00" );
+		//request.put( "item_0_productName", "KFLTFDIV" );
+		//request.put( "item_0_productSKU", "SKU0" );
+		//request.put( "item_0_quantity", "100" );
+		//request.put( "item_0_unitPrice", "10.00" );
 		
 		// full settlement
-		//request.put( "purchaseTotals_grandTotalAmount", "1572.00" );
+		request.put( "purchaseTotals_grandTotalAmount", "1572.00" );
 
 		// add more fields here per your business needs
 		
@@ -217,18 +217,18 @@ public class AuthCaptureSample
 	 * @param header	Header text.
 	 * @param map		Map object to display.
 	 */
-    private static void displayMap( String header, Map map )
-    {
-	    System.out.println( header );
+    private static void displayMap( String header, Map mapraw ) {
 	    
+	    System.out.println( header );
+
+	    TreeMap<String, String> map = new TreeMap<>(mapraw);
 		StringBuffer dest = new StringBuffer();
 		
-		if (map != null && !map.isEmpty())
-		{
+		if (map != null && !map.isEmpty()) {
 			Iterator iter = map.keySet().iterator();
 			String key, val;
-			while (iter.hasNext())
-			{
+
+			while (iter.hasNext()) {
 				key = (String) iter.next();
 				val = (String) map.get( key );
 				dest.append( key + "=" + val + "\n" );
@@ -257,9 +257,7 @@ public class AuthCaptureSample
 	 * @param e			Critical ClientException object.
 	 * @param request	Request that was sent.
 	 */
-	private static void handleCriticalException(
-		ClientException e, Map request )
-	{
+	private static void handleCriticalException(ClientException e, Map request) {
 		// send the exception and order information to the appropriate
 		// personnel at your company using any suitable method, e.g. e-mail,
 		// multicast log, etc.
@@ -272,9 +270,7 @@ public class AuthCaptureSample
 	 * @param e			Critical ClientException object.
 	 * @param request	Request that was sent.
 	 */
-	private static void handleCriticalException(
-		FaultException e, Map request )
-	{
+	private static void handleCriticalException(FaultException e, Map request) {
 		// send the exception and order information to the appropriate
 		// personnel at your company using any suitable method, e.g. e-mail,
 		// multicast log, etc.
