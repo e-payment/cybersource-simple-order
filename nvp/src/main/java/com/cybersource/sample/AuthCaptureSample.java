@@ -57,7 +57,6 @@ public class AuthCaptureSample {
    		}
 	}
 
-
 	/**
 	 * Runs Credit Card Authorization.
 	 * 
@@ -71,7 +70,7 @@ public class AuthCaptureSample {
 	    
 	   	HashMap<String, String> request = new HashMap<String, String>();
 	   	
-		request.put( "ccAuthService_run", "true" );
+		request.put( "ccAuthService_run", "true");
 		
 		// We will let the Client get the merchantID from props and insert it
 		// into the request Map.
@@ -272,7 +271,93 @@ public class AuthCaptureSample {
 			}
 		}		
     }
-    
+
+    /**
+    *
+    * Reference: Payment_Tokenization_SO_API.pdf
+    * Requesting an On-Demand Transaction
+    * 
+    */
+    public static void runAuthorizeAndCaptureWithToken(String merchantReferenceCode, String tokenId) {
+
+		log.debug("merchantReferenceCode: {}", merchantReferenceCode);
+		log.debug("tokenId: {}", tokenId);
+
+	    String requestID = null;
+	   	HashMap<String, String> request = new HashMap<String, String>();
+	   	
+		request.put("ccAuthService_run", "true");
+		request.put("ccCaptureService_run", "true");
+		//request.put("ccCreditService_run", "true");
+
+		request.put("merchantReferenceCode", merchantReferenceCode);
+		request.put("recurringSubscriptionInfo_subscriptionID", tokenId);
+
+		request.put("purchaseTotals_currency", "THB");
+		request.put("purchaseTotals_grandTotalAmount", "123.45");
+
+		try {
+
+			displayMap( "FOLLOW-ON PAYMENT TOKEN REQUEST:", request);
+			
+			// run transaction now
+			Map<String, String> reply = Client.runTransaction(request, props);
+			String decision = (String) reply.get("decision");
+
+			if ("ACCEPT".equalsIgnoreCase(decision)) {
+				requestID = (String) reply.get("requestID");
+			}
+			
+			displayMap( "FOLLOW-ON PAYMENT TOKEN REPLY:", reply);			
+		}	
+		catch (Exception e) {
+
+			e.printStackTrace();
+			log.error("ERROR: {}", e.getMessage());
+
+		}
+	}
+
+	public static String runConvertTransactionToCustomerProfile(String paymentRequestID, String merchantReferenceCode) {
+
+		log.debug("paymentRequestID: {}", paymentRequestID);
+		log.debug("merchantReferenceCode: {}", merchantReferenceCode);
+
+		String subscriptionID = null;
+	   	HashMap<String, String> request = new HashMap<String, String>();
+
+	   	request.put("paySubscriptionCreateService_run", "true");
+		request.put("recurringSubscriptionInfo_frequency", "on-demand");
+
+		request.put("paySubscriptionCreateService_paymentRequestID", paymentRequestID);
+		request.put("merchantReferenceCode", merchantReferenceCode);
+
+		try {
+
+			displayMap("FOLLOW-ON REQUEST:", request);
+			
+			// run transaction now
+			Map<String, String> reply = Client.runTransaction(request, props);
+			String decision = (String) reply.get("decision");
+
+			if ("ACCEPT".equalsIgnoreCase(decision)) {
+				subscriptionID = (String) reply.get("paySubscriptionCreateReply_subscriptionID");
+			}
+
+			log.debug("subscriptionID: {}", subscriptionID);
+
+			displayMap("FOLLOW-ON REPLY:", reply);			
+		}	
+		catch (Exception e) {
+
+			e.printStackTrace();
+			log.error("ERROR: {}", e.getMessage());
+
+		}
+
+		return subscriptionID;
+	}
+
 	/**
 	 * Displays the content of the Map object.
 	 *
