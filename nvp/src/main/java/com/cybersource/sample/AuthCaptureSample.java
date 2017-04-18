@@ -23,7 +23,7 @@ public class AuthCaptureSample {
 	 * Entry point.
 	 *
 	 * @param args	command-line arguments. The name of the property file
-	 *              may be passed as a command-line argument.  If not passed, 
+	 *              may be passed as a command-line argument.  If not passed,
 	 *				it will look for "cybs.properties" in the current
 	 *				directory.
 	 */
@@ -36,6 +36,7 @@ public class AuthCaptureSample {
 
 	   	// read in properties file.
 		log.debug("Key file : {}", props.getProperty("keyFilename"));
+		log.debug("merchantReferenceCode: {}", merchantReferenceCode);
 
 	   	// run auth
    		String requestID = runAuth(merchantReferenceCode);
@@ -44,10 +45,11 @@ public class AuthCaptureSample {
    			runCapture(requestID, merchantReferenceCode);
    		}
 	}
-	
+
     public static void runAuthorizeAndReversal(String merchantReferenceCode) {
 
 		log.debug("Key file : {}", props.getProperty("keyFilename"));
+		log.debug("merchantReferenceCode: {}", merchantReferenceCode);
 
 	   	// run auth
    		String requestID = runAuth(merchantReferenceCode);
@@ -59,7 +61,7 @@ public class AuthCaptureSample {
 
 	/**
 	 * Runs Credit Card Authorization.
-	 * 
+	 *
 	 * @param props	Properties object.
 	 *
 	 * @return the requestID.
@@ -67,19 +69,19 @@ public class AuthCaptureSample {
     public static String runAuth(String merchantReferenceCode) {
 
 	    String requestID = null;
-	    
+
 	   	HashMap<String, String> request = new HashMap<String, String>();
-	   	
+
 		request.put( "ccAuthService_run", "true");
-		
+
 		// We will let the Client get the merchantID from props and insert it
 		// into the request Map.
-		
+
 		// this is your own tracking number.  CyberSource recommends that you
 		// use a unique one for each order.
 
 		request.put( "merchantReferenceCode", merchantReferenceCode);
-		
+
 		request.put( "billTo_firstName", "Krungsri" );
 		request.put( "billTo_lastName", "Simple" );
 		request.put( "billTo_street1", "1222 Rama 3 Road, Bang Phongphang" );
@@ -117,16 +119,16 @@ public class AuthCaptureSample {
 		request.put( "item_1_unitPrice", "5.72" );
 
 		// add more fields here per your business needs
-		
+
 		try
 		{
 			displayMap( "CREDIT CARD AUTHORIZATION REQUEST:", request );
-			
+
 			// run transaction now
-			Map<String, String>  reply = Client.runTransaction( request, props );	
-			
+			Map<String, String>  reply = Client.runTransaction( request, props );
+
 			displayMap( "CREDIT CARD AUTHORIZATION REPLY:", reply );
-			
+
 			// if the authorization was successful, obtain the request id
 			// for the follow-on capture later.
 			String decision = (String) reply.get( "decision" );
@@ -134,8 +136,8 @@ public class AuthCaptureSample {
 			{
 				requestID = (String) reply.get( "requestID" );
 			}
-			
-		}	
+
+		}
 		catch (ClientException e)
 		{
 			System.out.println( e.getMessage() );
@@ -152,27 +154,27 @@ public class AuthCaptureSample {
 				handleCriticalException( e, request );
 			}
 		}
-		
+
 		return requestID;
     }
-    
+
 	/**
 	 * Runs Credit Card Capture.
-	 * 
+	 *
 	 * @param props			Properties object.
 	 * @param authRequestID	requestID returned by a previous authorization.
 	 */
-    public static void runCapture(String authRequestID, String merchantReferenceCode) {  	
-	    
+    public static void runCapture(String authRequestID, String merchantReferenceCode) {
+
 	    String requestID = null;
-	    
+
 	   	HashMap<String, String> request = new HashMap<String, String>();
-	   	
+
 		request.put( "ccCaptureService_run", "true" );
-		
+
 		// We will let the Client get the merchantID from props and insert it
 		// into the request Map.
-		
+
 		// so that you can efficiently track the order in the CyberSource
 		// reports and transaction search screens, you should use the same
 		// merchantReferenceCode for the auth and subsequent captures and
@@ -189,21 +191,21 @@ public class AuthCaptureSample {
 		//request.put( "item_0_productSKU", "SKU0" );
 		//request.put( "item_0_quantity", "100" );
 		//request.put( "item_0_unitPrice", "10.00" );
-		
+
 		// full settlement
 		request.put( "purchaseTotals_grandTotalAmount", "1572.00" );
 
 		// add more fields here per your business needs
-		
+
 		try
 		{
 			displayMap( "FOLLOW-ON CAPTURE REQUEST:", request );
-			
+
 			// run transaction now
-			Map<String, String> reply = Client.runTransaction( request, props );	
-			
-			displayMap( "FOLLOW-ON CAPTURE REPLY:", reply );			
-		}	
+			Map<String, String> reply = Client.runTransaction( request, props );
+
+			displayMap( "FOLLOW-ON CAPTURE REPLY:", reply );
+		}
 		catch (ClientException e)
 		{
 			System.out.println( e.getMessage() );
@@ -219,21 +221,98 @@ public class AuthCaptureSample {
 			{
 				handleCriticalException( e, request );
 			}
-		}		
+		}
+    }
+
+    	/**
+	 * Runs Credit Card Authorization.
+	 *
+	 * @param props	Properties object.
+	 *
+	 * @return the requestID.
+	 */
+    public static String runSale(String merchantReferenceCode) {
+
+    	log.debug("merchantReferenceCode: {}", merchantReferenceCode);
+
+	    String requestID = null;
+
+	   	HashMap<String, String> request = new HashMap<String, String>();
+
+		request.put( "ccAuthService_run", "true");
+		request.put( "ccCaptureService_run", "true");
+
+		// We will let the Client get the merchantID from props and insert it
+		// into the request Map.
+
+		// this is your own tracking number.  CyberSource recommends that you
+		// use a unique one for each order.
+
+		request.put( "merchantReferenceCode", merchantReferenceCode);
+
+		request.put( "billTo_firstName", "Krungsri" );
+		request.put( "billTo_lastName", "Simple" );
+		request.put( "billTo_street1", "1222 Rama 3 Road, Bang Phongphang" );
+		request.put( "billTo_city", "Yannawa" );
+		request.put( "billTo_state", "Bangkok" );
+		request.put( "billTo_postalCode", "10210" );
+		request.put( "billTo_country", "TH" );
+		request.put( "billTo_email", "customer@mail.com" );
+		request.put( "billTo_phoneNumber", "+6622962000" );
+		request.put( "billTo_ipAddress", "10.7.7.7" );
+
+		request.put( "card_accountNumber", "5200000000000007" );
+		request.put( "card_expirationMonth", "12" );
+		request.put( "card_expirationYear", "2021" );
+
+		request.put( "purchaseTotals_currency", "THB" );
+
+		// there are two items in this sample
+		request.put( "item_0_productName", "KFLTFDIV" );
+		request.put( "item_0_productSKU", "SKU00" );
+		request.put( "item_0_quantity", "100" );
+		request.put( "item_0_unitPrice", "10.00" );
+
+		// add more fields here per your business needs
+
+		try {
+
+			displayMap( "CREDIT CARD SALE REQUEST:", request );
+
+			// run transaction now
+			Map<String, String>  reply = Client.runTransaction( request, props );
+
+			displayMap( "CREDIT CARD SALE REPLY:", reply );
+
+			// if the authorization was successful, obtain the request id
+			// for the follow-on capture later.
+			String decision = (String) reply.get( "decision" );
+			if ("ACCEPT".equalsIgnoreCase( decision )) {
+				requestID = (String) reply.get( "requestID" );
+			}
+		}
+		catch (Exception e) {
+
+			e.printStackTrace();
+			log.error("ERROR: {}", e.getMessage());
+
+		}
+
+		return requestID;
     }
 
     /**
 	 * Runs Full Authorization Reversal Request
-	 * 
+	 *
 	 * @param authRequestID	requestID returned by a previous authorization.
 	 * @param merchantReferenceCode
 	 */
-    public static void runReversal(String authRequestID, String merchantReferenceCode) {  	
-	    
+    public static void runReversal(String authRequestID, String merchantReferenceCode) {
+
 	    String requestID = null;
-	    
+
 	   	HashMap<String, String> request = new HashMap<String, String>();
-	   	
+
 	   	// reference the requestID returned by the previous auth.
 		request.put( "ccAuthReversalService_authRequestID", authRequestID);
 		request.put( "ccAuthReversalService_run", "true" );
@@ -244,16 +323,16 @@ public class AuthCaptureSample {
 		request.put( "purchaseTotals_grandTotalAmount", "1572.00" );
 
 		// add more fields here per your business needs
-		
+
 		try
 		{
-			displayMap( "FOLLOW-ON CAPTURE REQUEST:", request );
-			
+			displayMap( "FOLLOW-ON REVERSAL REQUEST:", request );
+
 			// run transaction now
-			Map<String, String> reply = Client.runTransaction( request, props );	
-			
-			displayMap( "FOLLOW-ON CAPTURE REPLY:", reply );			
-		}	
+			Map<String, String> reply = Client.runTransaction( request, props );
+
+			displayMap( "FOLLOW-ON REVERSAL REPLY:", reply );
+		}
 		catch (ClientException e)
 		{
 			System.out.println( e.getMessage() );
@@ -269,23 +348,23 @@ public class AuthCaptureSample {
 			{
 				handleCriticalException( e, request );
 			}
-		}		
+		}
     }
 
     /**
     *
     * Reference: Payment_Tokenization_SO_API.pdf
     * Requesting an On-Demand Transaction
-    * 
+    *
     */
-    public static void runAuthorizeAndCaptureWithToken(String merchantReferenceCode, String tokenId) {
+    public static void runPaymentWithToken(String merchantReferenceCode, String tokenId) {
 
 		log.debug("merchantReferenceCode: {}", merchantReferenceCode);
 		log.debug("tokenId: {}", tokenId);
 
 	    String requestID = null;
 	   	HashMap<String, String> request = new HashMap<String, String>();
-	   	
+
 		request.put("ccAuthService_run", "true");
 		request.put("ccCaptureService_run", "true");
 		//request.put("ccCreditService_run", "true");
@@ -294,12 +373,17 @@ public class AuthCaptureSample {
 		request.put("recurringSubscriptionInfo_subscriptionID", tokenId);
 
 		request.put("purchaseTotals_currency", "THB");
-		request.put("purchaseTotals_grandTotalAmount", "123.45");
+		request.put("purchaseTotals_grandTotalAmount", "1234.5");
+
+		request.put("merchantDefinedData_mddField_1", "MDD#1");
+		request.put("merchantDefinedData_mddField_2", "MDD#2");
+		request.put("merchantDefinedData_mddField_3", "MDD#3");
+		request.put("merchantDefinedData_mddField_4", "MDD#4");
 
 		try {
 
-			displayMap( "FOLLOW-ON PAYMENT TOKEN REQUEST:", request);
-			
+			displayMap( "CREDIT CARD PAYMENT TOKEN REQUEST:", request);
+
 			// run transaction now
 			Map<String, String> reply = Client.runTransaction(request, props);
 			String decision = (String) reply.get("decision");
@@ -307,9 +391,9 @@ public class AuthCaptureSample {
 			if ("ACCEPT".equalsIgnoreCase(decision)) {
 				requestID = (String) reply.get("requestID");
 			}
-			
-			displayMap( "FOLLOW-ON PAYMENT TOKEN REPLY:", reply);			
-		}	
+
+			displayMap( "CREDIT CARD PAYMENT TOKEN REPLY:", reply);
+		}
 		catch (Exception e) {
 
 			e.printStackTrace();
@@ -334,8 +418,8 @@ public class AuthCaptureSample {
 
 		try {
 
-			displayMap("FOLLOW-ON REQUEST:", request);
-			
+			displayMap("FOLLOW-ON TXN TO PROFILE REQUEST:", request);
+
 			// run transaction now
 			Map<String, String> reply = Client.runTransaction(request, props);
 			String decision = (String) reply.get("decision");
@@ -346,8 +430,8 @@ public class AuthCaptureSample {
 
 			log.debug("subscriptionID: {}", subscriptionID);
 
-			displayMap("FOLLOW-ON REPLY:", reply);			
-		}	
+			displayMap("FOLLOW-ON TXN TO PROFILE REPLY:", reply);
+		}
 		catch (Exception e) {
 
 			e.printStackTrace();
@@ -365,12 +449,12 @@ public class AuthCaptureSample {
 	 * @param map		Map object to display.
 	 */
     private static void displayMap( String header, Map mapraw ) {
-	    
+
 	    System.out.println( header );
 
 	    TreeMap<String, String> map = new TreeMap<>(mapraw);
 		StringBuffer dest = new StringBuffer();
-		
+
 		if (map != null && !map.isEmpty()) {
 			Iterator iter = map.keySet().iterator();
 			String key, val;
@@ -381,11 +465,11 @@ public class AuthCaptureSample {
 				dest.append( key + "=" + val + "\n" );
 			}
 		}
-		
-		System.out.println( dest.toString() );		
+
+		System.out.println( dest.toString() );
     }
-    
-       
+
+
 	/**
 	 * An exception is considered critical if some type of disconnect occurs
 	 * between the client and server and the client can't determine whether the
@@ -409,7 +493,7 @@ public class AuthCaptureSample {
 		// personnel at your company using any suitable method, e.g. e-mail,
 		// multicast log, etc.
 	}
-	
+
 	/**
 	 * See header comment in the other version of handleCriticalException
 	 * above.
@@ -421,7 +505,7 @@ public class AuthCaptureSample {
 		// send the exception and order information to the appropriate
 		// personnel at your company using any suitable method, e.g. e-mail,
 		// multicast log, etc.
-	}    
-} 
+	}
+}
 
 

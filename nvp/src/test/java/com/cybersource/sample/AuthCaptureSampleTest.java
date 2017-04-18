@@ -13,10 +13,17 @@ public class AuthCaptureSampleTest {
 	private static final SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
 
 	//@Test
-	public void shouldAuthorizeAndCapture() throws Exception {
+	public void shouldAcceptAuthorize() throws Exception {
 
 		String merchantReferenceCode = df.format(new Date());
-		AuthCaptureSample.runAuthorizeAndCapture(merchantReferenceCode);
+		AuthCaptureSample.runAuth(merchantReferenceCode);
+	}
+
+	//@Test
+	public void shouldAcceptSale() throws Exception {
+
+		String merchantReferenceCode = df.format(new Date());
+		AuthCaptureSample.runSale(merchantReferenceCode);
 	}
 
 	//@Test
@@ -28,7 +35,7 @@ public class AuthCaptureSampleTest {
 
 	/// PAYMENT TOKEN ///
 
-	// @Test
+	//@Test
 	public void shouldConvertTransactionToCustomerProfile() throws Exception {
 
 		String paymentRequestID = "4924423321026068503527";
@@ -51,12 +58,12 @@ public class AuthCaptureSampleTest {
 		// Card: xxxxxxxxxxxx0002, Expiry: 02/2022
 		String tokenId = "4924426422606332203011";
 
-		AuthCaptureSample.runAuthorizeAndCaptureWithToken(merchantReferenceCode, tokenId);
+		AuthCaptureSample.runPaymentWithToken(merchantReferenceCode, tokenId);
 		// decision=ACCEPT
 		// reasonCode=100
 	}
 
-	//@Test
+	// @Test
 	public void shouldRejectPaymentTokenCozCardExpire() throws Exception {
 
 		String merchantReferenceCode = df.format(new Date());
@@ -64,7 +71,7 @@ public class AuthCaptureSampleTest {
 		// Card: xxxxxxxxxxxx1111, Expiry: 04/2016
 		String tokenId = "4085059778630176195663";
 		
-		AuthCaptureSample.runAuthorizeAndCaptureWithToken(merchantReferenceCode, tokenId);
+		AuthCaptureSample.runPaymentWithToken(merchantReferenceCode, tokenId);
 		// decision=REJECT
 		// ccAuthReply_reasonCode=202
 		/* Decline - Expired card. You might also receive this
@@ -80,7 +87,7 @@ public class AuthCaptureSampleTest {
 		// Invalid Token Id
 		String tokenId = "4895555555555555555555";
 
-		AuthCaptureSample.runAuthorizeAndCaptureWithToken(merchantReferenceCode, tokenId);
+		AuthCaptureSample.runPaymentWithToken(merchantReferenceCode, tokenId);
 		// decision=REJECT
 		// reasonCode=102
 		// the subscription (4895555555555555555555) could not be found 
