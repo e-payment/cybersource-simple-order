@@ -10,7 +10,7 @@ To install the cybersource-sdk-java from central repository, add dependency to y
 <dependency>
     <groupId>com.cybersource</groupId>
     <artifactId>cybersource-sdk-java</artifactId>
-    <version>6.2.3</version>
+    <version>6.2.4</version>
 </dependency>
 ```
 
