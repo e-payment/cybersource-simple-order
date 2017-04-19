@@ -26,6 +26,14 @@ public class AuthCaptureSampleTest {
 		AuthCaptureSample.runSale(merchantReferenceCode);
 	}
 
+	@Test
+	public void shouldReversal() throws Exception {
+
+		String authRequestID = "4926001616336205403010";
+		String merchantReferenceCode = df.format(new Date());
+		AuthCaptureSample.runReversal(authRequestID, merchantReferenceCode);
+	}
+
 	//@Test
 	public void shouldAuthorizeAndReversal() throws Exception {
 
@@ -50,7 +58,7 @@ public class AuthCaptureSampleTest {
 		// * paySubscriptionCreateReply_subscriptionID=4924426422606332203011
 	}
 
-	@Test
+	// @Test
 	public void shouldAcceptPaymentToken() throws Exception {
 
 		String merchantReferenceCode = df.format(new Date());
