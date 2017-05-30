@@ -101,7 +101,8 @@ public class AuthCaptureSample {
 		// request.put( "shipTo_postalCode", "94401" );
 		// request.put( "shipTo_country", "US" );
 
-		request.put( "card_accountNumber", "4012001037141112" );
+		// request.put( "card_accountNumber", "4012001037141112" );
+		request.put( "card_accountNumber", "5200000000000007" );
 		request.put( "card_expirationMonth", "12" );
 		request.put( "card_expirationYear", "2021" );
 

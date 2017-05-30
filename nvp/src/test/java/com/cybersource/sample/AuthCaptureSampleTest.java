@@ -19,14 +19,14 @@ public class AuthCaptureSampleTest {
 		AuthCaptureSample.runAuth(merchantReferenceCode);
 	}
 
-	//@Test
+	@Test
 	public void shouldAcceptSale() throws Exception {
 
 		String merchantReferenceCode = df.format(new Date());
 		AuthCaptureSample.runSale(merchantReferenceCode);
 	}
 
-	@Test
+	//@Test
 	public void shouldReversal() throws Exception {
 
 		String authRequestID = "4926001616336205403010";
