@@ -1,0 +1,28 @@
+# Upload host
+host=batchtest.cybersource.com
+
+# Upload port
+port=<Upload port>
+
+# Username to log into the Business Center
+bcUserName=<Business Center login name>
+
+# Password to log into the Business Center
+bcPassword=<Business Center login password>
+
+# File to upload
+uploadFile=<path to your file>/<file name>
+
+# Path where to upload it to (provided by CyberSource)
+path=/upload/UploadBatchFile
+
+# Your CyberSource security key
+key=<key location path>/<key file name>
+
+# New key store you just created that contains the certificate
+keyStore=<key store location>/<new key store name>
+
+# Pass phrase is the string you used in -storepass option when you created 
+# the key store file earlier 
+passPhrase=<pass phrase>
+
