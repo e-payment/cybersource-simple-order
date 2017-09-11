@@ -1,0 +1,15 @@
+# git ignore
+
+.DS_Store
+
+target/
+log/
+src/test/resources/cybs.properties
+
+# Eclipse files
+.classpath
+.project
+
+# IntelliJ files
+.idea/
+*.iml

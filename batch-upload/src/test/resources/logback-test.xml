@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+   <property name="log-path" value="log" />
+   <property name="log-name" value="${log-path}/application" />
+
+   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+         <pattern>[%d{HH:mm:ss.SSS zzz}] %-5level [%t] %logger{30}.%method\(\) - %msg%n</pattern>
+      </encoder>
+   </appender>
+
+   <appender name="ROLLFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>${log-name}.log</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+         <!-- daily rollover -->
+         <fileNamePattern>${log-name}.%d{yyyyMMdd}.log</fileNamePattern>
+         <!-- keep 90 days' worth of history -->
+         <maxHistory>90</maxHistory>
+      </rollingPolicy>
+
+      <encoder>
+         <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS zzz}] %-5level [%t] %logger{30}.%method\(\) - %msg%n</pattern>
+      </encoder>
+   </appender>
+
+   <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+      <appender-ref ref="CONSOLE" />
+      <includeCallerData>true</includeCallerData>
+   </appender>
+
+   <logger name="batch" level="DEBUG" />
+   <logger name="com.company.module" level="DEBUG" />
+
+   <root level="INFO">
+      <appender-ref ref="CONSOLE" />
+      <!-- <appender-ref ref="ROLLFILE" /> -->
+   </root>
+
+</configuration>
