@@ -28,3 +28,5 @@ screenshots/*
 target/
 #*.p12
 *.db
+
+**/cybs.properties
