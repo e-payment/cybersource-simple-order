@@ -19,19 +19,6 @@ public class AuthCaptureSample {
 	private static final Logger log = LoggerFactory.getLogger(AuthCaptureSample.class);
 	private static Properties props = Utility.readProperties(new String[] { "cybs.properties" });
 
-	/**
-	 * Entry point.
-	 *
-	 * @param args	command-line arguments. The name of the property file
-	 *              may be passed as a command-line argument.  If not passed,
-	 *				it will look for "cybs.properties" in the current
-	 *				directory.
-	 */
-
-    public static void main(String[] args) {
-
-    }
-
     public static void runAuthorizeAndCapture(String merchantReferenceCode) {
 
 	   	// read in properties file.
@@ -61,8 +48,6 @@ public class AuthCaptureSample {
 
 	/**
 	 * Runs Credit Card Authorization.
-	 *
-	 * @param props	Properties object.
 	 *
 	 * @return the requestID.
 	 */
@@ -121,8 +106,7 @@ public class AuthCaptureSample {
 
 		// add more fields here per your business needs
 
-		try
-		{
+		try {
 			displayMap( "CREDIT CARD AUTHORIZATION REQUEST:", request );
 
 			// run transaction now
@@ -137,21 +121,19 @@ public class AuthCaptureSample {
 			{
 				requestID = (String) reply.get( "requestID" );
 			}
-
 		}
-		catch (ClientException e)
-		{
+		catch (ClientException e) {
 			System.out.println( e.getMessage() );
 			if (e.isCritical())
 			{
 				handleCriticalException( e, request );
 			}
 		}
-		catch (FaultException e)
-		{
+		catch (FaultException e) {
+
 			System.out.println( e.getMessage() );
-			if (e.isCritical())
-			{
+
+			if (e.isCritical()) {
 				handleCriticalException( e, request );
 			}
 		}
@@ -225,8 +207,8 @@ public class AuthCaptureSample {
 		}
     }
 
-    	/**
-	 * Runs Credit Card Authorization.
+    /**
+	 * Runs Credit Card Authorization And Capture.
 	 *
 	 * @param props	Properties object.
 	 *
@@ -443,6 +425,7 @@ public class AuthCaptureSample {
 		return subscriptionID;
 	}
 
+
 	/**
 	 * Displays the content of the Map object.
 	 *
@@ -508,5 +491,3 @@ public class AuthCaptureSample {
 		// multicast log, etc.
 	}
 }
-
-

@@ -26,10 +26,18 @@ public class AuthCaptureSampleTest {
 		AuthCaptureSample.runSale(merchantReferenceCode);
 	}
 
+	// @Test
+	public void shouldCapture() throws Exception {
+
+		String authRequestID         = "5052093119776142403529";
+		String merchantReferenceCode = "B1505209285835";
+		AuthCaptureSample.runCapture(authRequestID, merchantReferenceCode);
+	}
+
 	//@Test
 	public void shouldReversal() throws Exception {
 
-		String authRequestID = "4926001616336205403010";
+		String authRequestID         = "4926001616336205403010";
 		String merchantReferenceCode = df.format(new Date());
 		AuthCaptureSample.runReversal(authRequestID, merchantReferenceCode);
 	}
@@ -40,8 +48,6 @@ public class AuthCaptureSampleTest {
 		String merchantReferenceCode = df.format(new Date());
 		AuthCaptureSample.runAuthorizeAndReversal(merchantReferenceCode);
 	}
-
-	/// PAYMENT TOKEN ///
 
 	//@Test
 	public void shouldConvertTransactionToCustomerProfile() throws Exception {
