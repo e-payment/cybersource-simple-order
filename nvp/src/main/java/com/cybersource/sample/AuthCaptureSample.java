@@ -58,6 +58,7 @@ public class AuthCaptureSample {
 	   	HashMap<String, String> request = new HashMap<String, String>();
 
 		request.put( "ccAuthService_run", "true");
+		request.put( "invoiceHeader_merchantDescriptor", "TMN Wallet Utility Bill");
 
 		// We will let the Client get the merchantID from props and insert it
 		// into the request Map.
@@ -154,6 +155,7 @@ public class AuthCaptureSample {
 	   	HashMap<String, String> request = new HashMap<String, String>();
 
 		request.put( "ccCaptureService_run", "true" );
+		request.put( "invoiceHeader_merchantDescriptor", "TMN Wallet Utility Bill");
 
 		// We will let the Client get the merchantID from props and insert it
 		// into the request Map.
@@ -224,6 +226,7 @@ public class AuthCaptureSample {
 
 		request.put( "ccAuthService_run", "true");
 		request.put( "ccCaptureService_run", "true");
+		request.put( "invoiceHeader_merchantDescriptor", "TMN Wallet Utility Bill");
 
 		// We will let the Client get the merchantID from props and insert it
 		// into the request Map.
