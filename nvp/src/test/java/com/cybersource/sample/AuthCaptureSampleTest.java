@@ -19,7 +19,7 @@ public class AuthCaptureSampleTest {
 		AuthCaptureSample.runAuth(merchantReferenceCode);
 	}
 
-	@Test
+	//@Test
 	public void shouldAcceptSale() throws Exception {
 
 		String merchantReferenceCode = df.format(new Date());
